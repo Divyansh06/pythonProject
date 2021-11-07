@@ -8,8 +8,6 @@ invalid_data = {'Error': 'Invalid Data!'}
 @api_view(['GET'])
 def api_overview(request):
     api_urls = {
-        'Sign up': '/api/user-signup',
-        'Sign in': '/api/user-signin',
         'Task List': '/api/tasks/',
         'Task Details': '/api/tasks/<str:pk>',
         'Task Create': '/api/tasks-create/',
