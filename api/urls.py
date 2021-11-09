@@ -1,7 +1,6 @@
 from django.urls import path
 from api import views
 
-
 urlpatterns = [
     path('', views.api_overview),
     path('tasks/', views.task_list),

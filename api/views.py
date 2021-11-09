@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from . import models, serializers
+from accounts.serializers import UserSerializer
 
 invalid_data = {'Error': 'Invalid Data!'}
 
@@ -25,20 +26,26 @@ def api_overview(request):
 
 
 # Task Views
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def task_list(request):
-    task = models.Task.objects.all()
-    serializer = serializers.TaskSerializer(task, many=True)
-    return Response(serializer)
+    user_id = request.user.id
+    if 'workspace_id' in request.data:
+        workspace_id = request.data.workspace_id
+        task = models.Task.objects.filter(user_id=user_id, workspace_id=workspace_id)
+        serializer = serializers.TaskSerializer(task, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({'Error': 'Need workspace id'})
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def task_details(request, pk):
-    task = models.Task.objects.get(id=pk)
+    user_id = request.user.id
+    task = models.Task.objects.filter(id=pk, user_id=user_id)
     serializer = serializers.TaskSerializer(task, many=False)
-    return Response(serializer)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])
@@ -67,7 +74,8 @@ def task_update(request, pk):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def task_delete(request, pk):
-    task = models.Task.objects.get(id=pk)
+    user_id = request.user.id
+    task = models.Task.objects.filter(id=pk, user_id=user_id)
     task.delete()
     return Response('SUCCESS')
 
@@ -76,17 +84,19 @@ def task_delete(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def workspace_list(request):
-    workspace = models.Workspace.objects.all()
+    user_id = request.user.id
+    workspace = models.Workspace.objects.filter(user_id=user_id)
     serializer = serializers.WorkspaceSerializer(workspace, many=True)
-    return Response(serializer)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def workspace_details(request, pk):
-    workspace = models.Workspace.objects.get(id=pk)
+    user_id = request.user.id
+    workspace = models.Workspace.objects.filter(id=pk, user_id=user_id)
     serializer = serializers.WorkspaceSerializer(workspace, many=False)
-    return Response(serializer)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])
@@ -115,6 +125,7 @@ def workspace_update(request, pk):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def workspace_delete(request, pk):
-    workspace = models.Workspace.objects.get(id=pk)
+    user_id = request.user.id
+    workspace = models.Workspace.objects.filter(id=pk, user_id=user_id)
     workspace.delete()
     return Response('SUCCESS')
