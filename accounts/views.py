@@ -64,7 +64,12 @@ def user_list(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def user_details(request, pk):
-    users = User.objects.get(id=pk)
-    serializer = serializers.UserSerializer(users, many=False)
+def user_details(request):
+    user_id = request.user.id
+    user = User.objects.get(id=user_id)
+
+    if not user:
+        return Response({'Error': 'User does not Exists!'})
+
+    serializer = serializers.UserSerializer(user, many=False)
     return Response(serializer.data)

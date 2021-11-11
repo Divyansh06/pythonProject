@@ -7,6 +7,8 @@ urlpatterns = [
     path('create/', views.user_create),
     path('login/', views.user_login),
     path('logout/', views.user_logout),
-    path('get-users/', views.user_list),
-    path('get-users/<str:pk>', views.user_details),
+    path('user-details/', views.user_details),
+
+    # For testing Purpose only
+    path('user-list/', views.user_list),
 ]
