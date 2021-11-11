@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Workspace(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     description = models.CharField(max_length=2000)
     image_url = models.URLField()
 

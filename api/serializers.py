@@ -10,11 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class WorkspaceSerializer(serializers.ModelSerializer):
     class Meta:
-        models = models.Workspace
+        model = models.Workspace
         fields = '__all__'
 
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
-        models = models.Task
+        model = models.Task
         fields = '__all__'
